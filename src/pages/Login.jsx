@@ -8,6 +8,15 @@ function Login() {
   const [errorMessage, setErrorMessage] = useState('')
   const navigate = useNavigate()
 
+  // Googleログイン処理
+  const handleGoogleLogin = async () => {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: { redirectTo: `${window.location.origin}/tasks` },
+    })
+    if (error) setErrorMessage('Googleログインに失敗しました：' + error.message)
+  }
+
   // ログイン処理
   const handleLogin = async (e) => {
     e.preventDefault()
@@ -53,6 +62,10 @@ function Login() {
         {errorMessage && <p className="error-message">{errorMessage}</p>}
         <button type="submit">ログイン</button>
       </form>
+      <hr style={{ margin: '16px 0' }} />
+      <button type="button" onClick={handleGoogleLogin} style={{ width: '100%', padding: '10px', backgroundColor: '#fff', color: '#333', border: '1px solid #ccc', borderRadius: '4px', fontSize: '16px', cursor: 'pointer' }}>
+        Googleでログイン
+      </button>
       <p>
         会員登録は<Link to="/signup">こちら</Link>
       </p>
